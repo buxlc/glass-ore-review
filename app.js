@@ -484,7 +484,14 @@
     const grid = $("#processGrid");
     if (!grid) return;
     grid.innerHTML = DATA.processes.map(function (p) {
-      const feature = p.id === "p12" ? " is-feature" : "";
+      const feature = (p.id === "p12" || p.id === "p13") ? " is-feature" : "";
+      const route = p.route
+        ? '<div class="process-diagram" aria-hidden="true"><span class="route-label">TYPICAL ROUTE</span>' +
+            p.route.map(function (step, i) {
+              return "<b>" + esc(step) + "</b>" + (i < p.route.length - 1 ? "<i>→</i>" : "");
+            }).join("") +
+          "</div>"
+        : "";
       return '<article class="process-card' + feature + '">' +
         '<div class="process-top"><span class="process-tag">' + esc(p.tag) + '</span><span class="process-no">' + p.no + "</span></div>" +
         "<h2>" + esc(p.title) + "</h2>" +
@@ -492,6 +499,7 @@
         '<p class="process-summary">' + esc(p.summary) + "</p>" +
         '<ul class="process-points">' + p.points.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" +
         '<div class="process-equip">' + p.equip.map(function (x) { return "<span>" + esc(x) + "</span>"; }).join("") + "</div>" +
+        route +
       "</article>";
     }).join("");
   }
