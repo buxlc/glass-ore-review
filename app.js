@@ -185,6 +185,12 @@
       .filter(function (w) { return w && !w.resolved && w.day === day; });
   }
 
+  function dayMistakeItems(day) {
+    return Object.keys(state.wrong)
+      .map(function (id) { return state.wrong[id]; })
+      .filter(function (w) { return w && w.day === day; });
+  }
+
   function recommendedDay() {
     for (let i = 1; i <= 5; i++) {
       if (!isDayComplete(i)) return i;
@@ -402,8 +408,8 @@
 
     const d = DATA.days[day - 1];
     if (!d) return;
-    const wc = dayWrongItems(day).length;
-    const sideWrong = day === 6 ? openWrongItems().length : wc;
+    const mc = dayMistakeItems(day).length;
+    const sideRecord = day === 6 ? openWrongItems().length : mc;
     const studyPool = day === 6 ? TERMS : dayTerms(day);
     const studyMastered = masteredCount(studyPool);
 
@@ -422,11 +428,11 @@
         '<div class="day-hero-side">' +
           '<div class="side-stat"><strong>' + dayTermCount(day) + '</strong><span>' + (day === 6 ? "Terms in scope" : "Terms in this day") + '</span></div>' +
           '<div class="side-stat"><strong>' + studyMastered + " / " + studyPool.length + '</strong><span>Fully mastered</span></div>' +
-          '<div class="side-stat"><strong>' + sideWrong + '</strong><span>Open mistakes</span></div>' +
+          '<div class="side-stat"><strong>' + sideRecord + '</strong><span>' + (day === 6 ? "Open mistakes" : "Mistake records") + '</span></div>' +
           '<button class="btn btn-primary" id="heroQuizBtn">' + (day === 6 ? "开始全库混合测" : "开始本日自测") + "</button>" +
           (day === 6
             ? '<button class="btn btn-ghost" data-view="equipment">打开设备速查</button>'
-            : '<button class="btn btn-ghost" id="heroWrongBtn"' + (wc === 0 ? " disabled" : "") + ">回顾本日错题" + (wc ? "（" + wc + "）" : "") + "</button>") +
+            : '<button class="btn btn-ghost" id="heroWrongBtn"' + (mc === 0 ? " disabled" : "") + ">" + (mc ? "复习本日错词（" + mc + "）" : "本日暂无错词") + "</button>") +
         "</div>" +
       "</div>";
     }
@@ -459,8 +465,8 @@
     const wrongBtn = $("#heroWrongBtn");
     if (wrongBtn) {
       wrongBtn.addEventListener("click", function () {
-        const ids = dayWrongItems(day).map(function (w) { return w.id; });
-        if (!ids.length) return toast("本日暂无未订正错题");
+        const ids = dayMistakeItems(day).map(function (w) { return w.id; });
+        if (!ids.length) return toast("本日暂无错词记录");
         startReview(ids, "study", day);
       });
     }
