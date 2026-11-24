@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#f7f4ee">
   <title>科技英语 · 六日复习 | Glass & Mineral Processing</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f1e1b'/%3E%3Cpath d='M32 10v44M10 32h44M16.5 16.5l31 31M47.5 16.5l-31 31' stroke='%23d97757' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=20261124b">
+  <link rel="stylesheet" href="styles.css?v=20261125b">
 </head>
 <body>
   <div class="page-grain" aria-hidden="true"></div>
@@ -67,6 +67,7 @@
               <span id="heroStartLabel">开始 DAY 01</span>
               <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10h11M11 5l5 5-5 5"/></svg>
             </button>
+            <button class="btn btn-ghost" id="heroFree">自由复习</button>
             <button class="btn btn-ghost" data-view="process">先看工艺图鉴</button>
           </div>
 
@@ -111,9 +112,15 @@
 
           <div class="week-dots" id="weekDots" aria-label="六日进度"></div>
 
+          <div class="today-mastery">
+            <span class="micro-label">MASTERED</span>
+            <div><strong id="homeMastered">0</strong><span> / 156 词</span></div>
+            <i><b id="homeMasteredBar"></b></i>
+          </div>
+
           <div class="today-note">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.3 5.4 5.9.5-4.5 3.9 1.4 5.7L12 15.6 6.9 18.5l1.4-5.7-4.5-3.9 5.9-.5L12 3z"/></svg>
-            <p>今天不追求“背完”，只追求<strong>能认、能选、能拼</strong>。错题会自动留到当天回顾。</p>
+            <p>今天不追求“背完”，只追求<strong>能认、能拼</strong>。每个词过两关，答错会在 5 题后回炉。</p>
           </div>
         </aside>
       </div>
@@ -131,7 +138,7 @@
             <p class="eyebrow"><span class="eyebrow-dot"></span>THE SIX-DAY PLAN</p>
             <h2 id="planTitle">六天，走完一条完整的知识链</h2>
           </div>
-          <p class="section-aside">建议连续六天完成。每天先看术语卡，再做 12 道自测；错题留在当天回炉，不拖到第二天。</p>
+          <p class="section-aside">建议连续六天完成。每天先看术语卡，再做 12 个词的释义 + 拼写双重验证；错词 5 题后回炉。</p>
         </div>
         <div class="day-grid" id="dayGrid"></div>
       </section>
@@ -151,7 +158,7 @@
           <article class="method-card">
             <span class="method-no">02</span>
             <h3>自测</h3>
-            <p>选择 + 拼写混合出题。答错不跳过，立即看到正确答案与记忆提示。</p>
+            <p>选择 + 拼写双重验证。每个词都要过两关；答错会在 5 题后回炉，直到通过。</p>
           </article>
           <article class="method-card">
             <span class="method-no">03</span>
@@ -190,6 +197,7 @@
             <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 10s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5z"/><circle cx="10" cy="10" r="2.3"/></svg>
             遮挡中文
           </button>
+          <button class="btn btn-small btn-ghost" id="openScopeBtn">自由复习</button>
           <button class="btn btn-small btn-primary" id="studyStartQuiz">开始自测</button>
         </div>
       </div>
@@ -200,9 +208,9 @@
         <div>
           <p class="micro-label">READY TO CHECK?</p>
           <h3>看完了，就让题目来告诉你记住没有。</h3>
-          <p>12 道题，约 4 分钟。错题会自动进入“今日错题回顾”。</p>
+          <p>每个词都要过两关：先认释义，再拼拼写。答错会在 5 题后回炉，直到通过。</p>
         </div>
-        <button class="btn btn-primary" id="studyEndQuiz">开始本日自测 <span>→</span></button>
+        <button class="btn btn-primary" id="studyEndQuiz">开始双重验证 <span>→</span></button>
       </div>
     </section>
 
@@ -266,7 +274,7 @@
         <div>
           <p class="eyebrow"><span class="eyebrow-dot"></span>ERROR LOG · LOCAL ONLY</p>
           <h1 id="wrongTitle">错题本</h1>
-          <p>记录只保存在这台设备的浏览器里。答对一次即“已订正”，但历史不会消失。</p>
+          <p>记录只保存在这台设备的浏览器里。释义与拼写两关都通过，才移出“未订正”；错得越多的词，在排行榜里越靠前。</p>
         </div>
         <div class="wrong-summary" id="wrongSummary"></div>
       </header>
@@ -282,6 +290,18 @@
       </div>
 
       <div class="wrong-list" id="wrongList"></div>
+
+      <section class="error-board" aria-labelledby="errorBoardTitle">
+        <div class="error-board-head">
+          <div>
+            <p class="micro-label">MOST-MISSED WORDS</p>
+            <h2 id="errorBoardTitle">错误率排行榜</h2>
+            <p>按累计答错次数排序；次数相同时，错误率更高的词在前。</p>
+          </div>
+          <span class="error-board-note">LOCAL STATS</span>
+        </div>
+        <div id="errorLeaderboard"></div>
+      </section>
     </section>
   </main>
 
@@ -315,6 +335,62 @@
     </div>
   </div>
 
+  <!-- ================= SCOPE MODAL ================= -->
+  <div class="scope-backdrop" id="scopeModal" hidden>
+    <div class="scope-box" role="dialog" aria-modal="true" aria-labelledby="scopeTitle">
+      <header class="scope-modal-head">
+        <div>
+          <p class="micro-label">NEW PRACTICE SESSION</p>
+          <h2 id="scopeTitle">选择复习范围</h2>
+        </div>
+        <button class="icon-btn" id="closeScope" aria-label="关闭复习范围选择">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </header>
+
+      <p class="scope-lead">每个词都要经过“释义 + 拼写”两关。答错会在 5 题后再次出现，直到通过为止；完成后可看本次错误率排行榜。</p>
+
+      <div class="scope-block">
+        <p class="scope-label">01 / 选择来源</p>
+        <div class="scope-source-grid" id="scopeSources">
+          <button class="scope-source" data-scope-source="daily">
+            <span class="scope-source-icon">D</span>
+            <b>按每日进度</b>
+            <small>从某一天的词里抽 12 个</small>
+          </button>
+          <button class="scope-source" data-scope-source="all">
+            <span class="scope-source-icon">A</span>
+            <b>全词库</b>
+            <small>固定数量，或全部 156 词</small>
+          </button>
+        </div>
+      </div>
+
+      <div class="scope-block" id="scopeDailyBlock">
+        <p class="scope-label">02 / 选择哪一天</p>
+        <div class="scope-day-grid" id="scopeDayGrid"></div>
+      </div>
+
+      <div class="scope-block" id="scopeQuantityBlock">
+        <p class="scope-label">02 / 本次词数</p>
+        <div class="scope-quantity-grid" id="scopeQuantityGrid">
+          <button data-scope-qty="10">10 词</button>
+          <button data-scope-qty="20">20 词</button>
+          <button data-scope-qty="30">30 词</button>
+          <button data-scope-qty="50">50 词</button>
+          <button data-scope-qty="all">全部</button>
+        </div>
+      </div>
+
+      <div class="scope-summary" id="scopeSummary"></div>
+
+      <div class="scope-actions">
+        <button class="btn btn-ghost" id="scopeCancel">取消</button>
+        <button class="btn btn-primary" id="scopeStart">开始双重验证 →</button>
+      </div>
+    </div>
+  </div>
+
   <div class="confirm-backdrop" id="confirmModal" hidden>
     <div class="confirm-box" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
       <p class="micro-label">PLEASE CONFIRM</p>
@@ -329,7 +405,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="data.js?v=20261124b"></script>
-  <script src="app.js?v=20261124b"></script>
+  <script src="data.js?v=20261125b"></script>
+  <script src="app.js?v=20261125b"></script>
 </body>
 </html>
