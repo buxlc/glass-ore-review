@@ -1304,7 +1304,7 @@
       ? '<button class="btn btn-primary" id="resultReview">再练本次错词（' + errorIds.length + "）</button>"
       : "";
     const actionRetry = '<button class="btn btn-ghost" id="resultRetry">' + (isReview ? "再回顾一轮" : "再测一轮") + "</button>";
-    const actionClose = '<button class="btn btn-ghost" id="resultClose">' + (isReview ? (s.returnView === "study" && s.day ? "返回学习" : "返回错题本") : "返回学习") + "</button>";
+    const actionClose = '<button class="btn btn-ghost" id="resultClose">' + (isReview ? (s.returnView === "study" && s.day ? "返回学习" : "返回错题本") : (s.source === "all" ? "返回总览" : "返回学习")) + "</button>";
 
     const board = errorIds.map(function (id) {
       const term = TERM_BY_ID.get(id);
